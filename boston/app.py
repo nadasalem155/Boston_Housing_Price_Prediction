@@ -5,7 +5,7 @@ import joblib
 # Load the trained model and polynomial transformer
 model = joblib.load("poly_model.pkl")
 poly = joblib.load("poly_transformer.pkl")  # Make sure you saved it earlier
-
+scaler = joblib.load('scaler.pkl')
 # App title
 st.title("Boston Housing Price Prediction")
 
