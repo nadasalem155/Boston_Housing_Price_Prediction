@@ -12,17 +12,21 @@ The dataset used is the classic Boston Housing Dataset, commonly used in regress
 
 ## Models Applied
 
-1. Simple Linear Regression  
-   - Feature used: `RM` (Average number of rooms per dwelling)  
-   - MSE: 28.92
+### 1. Simple Linear Regression  
+- Features used: `RM` (Average number of rooms per dwelling)  
+- Reason: `RM` had the strongest correlation with the target variable.  
+- MSE: 28.92
 
-2. Multiple Linear Regression  
-   - All relevant features  
-   - MSE: 13.82
+### 2. Multiple Linear Regression  
+- Features used: Top 3 features most correlated with `MEDV`:  
+  - `RM`, `PTRATIO`, `LSTAT`  
+- Reason: These features showed the strongest linear relationships with the target.  
+- MSE: 13.82
 
-3. Polynomial Regression  
-   - Captures non-linear relationships  
-   - MSE: 9.29 (Best performance)
+### 3. Polynomial Regression  
+- Features used: Same as in multiple linear regression (`RM`, `PTRATIO`, `LSTAT`)  
+- Reason: Applied polynomial transformation to capture non-linear relationships between features and the target.  
+- MSE: 9.29 (Best performance)
 
 **Evaluation Metric:** Mean Squared Error (MSE)  
 Lower MSE = better performance
