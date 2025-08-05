@@ -26,9 +26,9 @@ This app predicts the *median value of a house* (in $1000s) using three features
 
 # User input (with realistic ranges)
 st.subheader("🔢 Enter feature values:")
-rm = st.number_input("Average number of rooms per dwelling (RM)", min_value=3.0, max_value=9.0, value=0.0)
-ptratio = st.number_input("Pupil-teacher ratio by town (PTRATIO)", min_value=12.0, max_value=22.0, value=0.0)
-lstat = st.number_input("Percentage of lower status population (LSTAT)", min_value=1.0, max_value=40.0, value=0.0)
+rm = st.number_input("Average number of rooms per dwelling (RM)", min_value=3.0, max_value=9.0)
+ptratio = st.number_input("Pupil-teacher ratio by town (PTRATIO)", min_value=12.0, max_value=22.0)
+lstat = st.number_input("Percentage of lower status population (LSTAT)", min_value=1.0, max_value=40.0)
 
 # Prediction
 if st.button("Predict"):
