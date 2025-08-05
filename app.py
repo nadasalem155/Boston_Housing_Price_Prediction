@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-model = joblib.load('C:\Users\mms2023\Documents\GitHub\Boston_Housing_Price_Prediction\poly_model.pkl')
-poly = joblib.load('C:\Users\mms2023\Documents\GitHub\Boston_Housing_Price_Prediction\poly_transformer.pkl')
-scaler = joblib.load('C:\Users\mms2023\Documents\GitHub\Boston_Housing_Price_Prediction\scaler.pkl')
+model = joblib.load('poly_model.pkl')
+poly = joblib.load('poly_transformer.pkl')
+scaler = joblib.load('scaler.pkl')
 
 # App title
 st.title("Boston Housing Price Prediction")
