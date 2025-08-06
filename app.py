@@ -1,51 +1,69 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 import joblib
-import os
 
-# Load model and tools
-model = joblib.load('poly_model.pkl')
-poly = joblib.load('poly_transformer.pkl')
-scaler = joblib.load('scaler.pkl')
+# Load model and preprocessors
+model = joblib.load("poly_model.pkl")
+scaler = joblib.load("scaler.pkl")
+poly = joblib.load("poly_transformer.pkl")  # ✅ Correct file name
 
-# App title
-st.title("🏠 Boston Housing Price Prediction")
+# Page config
+st.set_page_config(page_title="Boston House Price App", layout="centered")
 
-st.markdown("""
-This app predicts the *median value of a house* (in $1000s) using three features:
+# Title and instruction
+st.title("🏠 Boston House Price Predictor")
+st.markdown("Adjust the inputs below to estimate the predicted house price.")
 
-- *RM*: Average number of rooms per dwelling  
-- *PTRATIO*: Pupil-to-teacher ratio by town  
-- *LSTAT*: % of lower status population  
+# --- Input sliders ---
+st.subheader("📊 Input Features")
 
-ℹ️ Please enter realistic values:
-- RM: 3.0 – 9.0  
-- PTRATIO: 12.0 – 22.0  
-- LSTAT: 1.0 – 40.0
-""")
+col1, col2 = st.columns(2)
+with col1:
+    rm = st.slider("RM (average rooms per dwelling)", 3.0, 10.0, 6.0, 0.1)
+with col2:
+    ptratio = st.slider("PTRATIO (pupil-teacher ratio)", 10.0, 25.0, 18.0, 0.1)
 
-# User input (with realistic ranges)
-st.subheader("🔢 Enter feature values:")
-rm = st.number_input("Average number of rooms per dwelling (RM)", min_value=3.0, max_value=9.0)
-ptratio = st.number_input("Pupil-teacher ratio by town (PTRATIO)", min_value=12.0, max_value=22.0)
-lstat = st.number_input("Percentage of lower status population (LSTAT)", min_value=1.0, max_value=40.0)
+lstat = st.slider("LSTAT (% lower status population)", 1.0, 40.0, 12.0, 0.5)
 
-# Prediction
-if st.button("Predict"):
-    # Step 0: Create input DataFrame
-    input_df = pd.DataFrame([[rm, ptratio, lstat]], columns=["RM", "PTRATIO", "LSTAT"])
+# --- Prediction ---
+input_data = pd.DataFrame([[rm, ptratio, lstat]], columns=["RM", "PTRATIO", "LSTAT"])
+input_scaled = scaler.transform(input_data)
+input_poly = poly.transform(input_scaled)
+prediction = model.predict(input_poly)[0]
+
+st.markdown(f"### 💰 Predicted House Price: ${prediction * 1000:.2f}")
+
+# --- Function to plot feature vs price ---
+def plot_feature_vs_price(feature_name, feature_range):
+    preds = []
+    for val in feature_range:
+        temp = pd.DataFrame([[rm, ptratio, lstat]], columns=["RM", "PTRATIO", "LSTAT"])
+        temp[feature_name] = val
+        temp_scaled = scaler.transform(temp)
+        temp_poly = poly.transform(temp_scaled)
+        preds.append(model.predict(temp_poly)[0])
     
-    # Step 1: Scale input
-    input_scaled = pd.DataFrame(scaler.transform(input_df), columns=["RM", "PTRATIO", "LSTAT"])
-    
-    # Step 2: Polynomial transformation
-    input_poly = poly.transform(input_scaled)
-    
-    # Step 3: Predict
-    prediction = model.predict(input_poly)[0]
-    
-    # Step 4: Display result
-    if prediction < 0:
-        st.warning("⚠️ Warning: Predicted price is negative. Please check your input values.")
-    else:
-        st.success(f"💰 Estimated MEDV (Housing Price): ${prediction:.2f}k")
+    fig, ax = plt.subplots(figsize=(4, 2))  # ✅ Smaller plot
+    ax.plot(feature_range, preds)
+    ax.set_xlabel(feature_name)
+    ax.set_ylabel("MEDV")
+    ax.set_title(f"{feature_name} vs MEDV", fontsize=10)
+    ax.grid(True)
+    return fig
+
+# --- Mini plots for features ---
+st.markdown("### 🔍 Feature Impact")
+
+col1, col2 = st.columns(2)
+with col1:
+    st.markdown("*RM*")
+    st.pyplot(plot_feature_vs_price("RM", np.linspace(3, 10, 50)))
+
+with col2:
+    st.markdown("*PTRATIO*")
+    st.pyplot(plot_feature_vs_price("PTRATIO", np.linspace(10, 25, 50)))
+
+st.markdown("*LSTAT*")
+st.pyplot(plot_feature_vs_price("LSTAT", np.linspace(1, 40, 50)))
