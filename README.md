@@ -2,6 +2,7 @@
 
 This project focuses on predicting the median value of owner-occupied homes in Boston using various housing and demographic features such as number of rooms, crime rate, and distance to employment centers.
 
+https://bostonhousing-price-prediction.streamlit.app/
 ## Dataset
 
 The dataset used is the classic Boston Housing Dataset, commonly used in regression problems.
