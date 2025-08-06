@@ -4,66 +4,100 @@ import numpy as np
 import matplotlib.pyplot as plt
 import joblib
 
-# Load model and preprocessors
-model = joblib.load("poly_model.pkl")
+# Load the trained model and preprocessors
+regressor = joblib.load("poly_model.pkl")
 scaler = joblib.load("scaler.pkl")
-poly = joblib.load("poly_transformer.pkl")  # ✅ Correct file name
+poly = joblib.load("poly_transformer.pkl")
 
-# Page config
-st.set_page_config(page_title="Boston House Price App", layout="centered")
+st.set_page_config(page_title="Boston House Price App", layout="wide")
 
-# Title and instruction
+# Sidebar with explanations
+with st.sidebar:
+    st.header("Feature Explanation")
+    
+    st.markdown("""
+    ### RM (Average number of rooms per dwelling)
+    RM represents the average number of rooms in a house.  
+    Generally, the more rooms, the higher the house value.  
+    However, due to the polynomial regression model, this relationship isn't always linear – sometimes increasing RM may lead to a decrease in predicted price.
+    """)
+
+    st.markdown("""
+    ### PTRATIO (Pupil-Teacher Ratio)
+    PTRATIO is the number of students per teacher in schools within the area.  
+    Lower PTRATIO usually indicates better education quality.  
+    As a result, areas with lower PTRATIO often have higher house prices.
+    """)
+
+    st.markdown("""
+    ### LSTAT (% lower status population)
+    LSTAT measures the percentage of people with lower socio-economic status in a neighborhood.  
+    Higher LSTAT often correlates with lower housing demand and thus lower prices.  
+    So, as LSTAT increases, predicted price tends to decrease.
+    """)
+
+    st.markdown("""
+    ℹ️ Note:  
+    This model uses polynomial regression, meaning relationships between features and the target (MEDV) may not always be linear.  
+    In some ranges, increasing a feature may decrease the predicted value depending on the curve's shape.
+    """)
+
+# ===== Title and Input Sliders =====
 st.title("🏠 Boston House Price Predictor")
-st.markdown("Adjust the inputs below to estimate the predicted house price.")
+st.markdown("Use the sliders below to explore how different features affect the predicted house price.")
 
-# --- Input sliders ---
-st.subheader("📊 Input Features")
-
+# Sliders with minimum values set correctly
 col1, col2 = st.columns(2)
 with col1:
-    rm = st.slider("RM (average rooms per dwelling)", 3.0, 10.0, 6.0, 0.1)
+    rm = st.slider("RM (Average Rooms per Dwelling)", 3.56, 8.78, 3.56, 0.1)
 with col2:
-    ptratio = st.slider("PTRATIO (pupil-teacher ratio)", 10.0, 25.0, 18.0, 0.1)
+    ptratio = st.slider("PTRATIO (Pupil-Teacher Ratio)", 12.6, 22.0, 12.6, 0.1)
 
-lstat = st.slider("LSTAT (% lower status population)", 1.0, 40.0, 12.0, 0.5)
+lstat = st.slider("LSTAT (% Lower Status Population)", 1.73, 37.97, 1.73, 0.5)
 
-# --- Prediction ---
-input_data = pd.DataFrame([[rm, ptratio, lstat]], columns=["RM", "PTRATIO", "LSTAT"])
-input_scaled = scaler.transform(input_data)
+# Prediction
+input_df = pd.DataFrame([[rm, ptratio, lstat]], columns=["RM", "PTRATIO", "LSTAT"])
+input_scaled = scaler.transform(input_df)
 input_poly = poly.transform(input_scaled)
-prediction = model.predict(input_poly)[0]
+predicted_price = regressor.predict(input_poly)[0]
 
-st.markdown(f"### 💰 Predicted House Price: ${prediction * 1000:.2f}")
+st.markdown(f"### 💰 Predicted House Price: ${predicted_price * 1000:.2f}")
 
-# --- Function to plot feature vs price ---
-def plot_feature_vs_price(feature_name, feature_range):
+# ===== Feature vs MEDV Plots =====
+st.markdown("## 📊 Feature Impact on Price (MEDV)")
+
+def generate_plot(feature_name, feature_values, size=(2.2, 1.5)):
     preds = []
-    for val in feature_range:
-        temp = pd.DataFrame([[rm, ptratio, lstat]], columns=["RM", "PTRATIO", "LSTAT"])
-        temp[feature_name] = val
-        temp_scaled = scaler.transform(temp)
-        temp_poly = poly.transform(temp_scaled)
-        preds.append(model.predict(temp_poly)[0])
+    for val in feature_values:
+        row = pd.DataFrame([[rm, ptratio, lstat]], columns=["RM", "PTRATIO", "LSTAT"])
+        row[feature_name] = val
+        scaled = scaler.transform(row)
+        poly_features = poly.transform(scaled)
+        preds.append(regressor.predict(poly_features)[0])
     
-    fig, ax = plt.subplots(figsize=(4, 2))  # ✅ Smaller plot
-    ax.plot(feature_range, preds)
+    fig, ax = plt.subplots(figsize=size)
+    ax.plot(feature_values, preds)
     ax.set_xlabel(feature_name)
     ax.set_ylabel("MEDV")
-    ax.set_title(f"{feature_name} vs MEDV", fontsize=10)
+    ax.set_title(f"{feature_name} vs MEDV", fontsize=8)
     ax.grid(True)
+
+    # Show only 3 ticks on both axes
+    ax.set_xticks(np.linspace(feature_values.min(), feature_values.max(), 3))
+    ax.set_yticks(np.linspace(min(preds), max(preds), 3))
+
     return fig
 
-# --- Mini plots for features ---
-st.markdown("### 🔍 Feature Impact")
+# Arrange plots in one row
+row1_col1, row1_col2, row1_col3 = st.columns(3)
+with row1_col1:
+    st.markdown("RM")
+    st.pyplot(generate_plot("RM", np.linspace(3.56, 8.78, 50)))
 
-col1, col2 = st.columns(2)
-with col1:
-    st.markdown("*RM*")
-    st.pyplot(plot_feature_vs_price("RM", np.linspace(3, 10, 50)))
+with row1_col2:
+    st.markdown("PTRATIO")
+    st.pyplot(generate_plot("PTRATIO", np.linspace(12.6, 22.0, 50)))
 
-with col2:
-    st.markdown("*PTRATIO*")
-    st.pyplot(plot_feature_vs_price("PTRATIO", np.linspace(10, 25, 50)))
-
-st.markdown("*LSTAT*")
-st.pyplot(plot_feature_vs_price("LSTAT", np.linspace(1, 40, 50)))
+with row1_col3:
+    st.markdown("LSTAT")
+    st.pyplot(generate_plot("LSTAT", np.linspace(1.73, 37.97, 50)))
