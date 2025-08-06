@@ -49,11 +49,11 @@ st.markdown("Use the sliders below to explore how different features affect the 
 # Sliders with minimum values set correctly
 col1, col2 = st.columns(2)
 with col1:
-    rm = st.slider("RM (Average Rooms per Dwelling)", 3.56, 8.78, 3.56, 0.1)
+    rm = st.slider("RM (Average Rooms per Dwelling)", 3.56, 8.78,6.17 , 0.1)
 with col2:
-    ptratio = st.slider("PTRATIO (Pupil-Teacher Ratio)", 12.6, 22.0, 12.6, 0.1)
+    ptratio = st.slider("PTRATIO (Pupil-Teacher Ratio)", 12.6, 22.0,17.3 , 0.1)
 
-lstat = st.slider("LSTAT (% Lower Status Population)", 1.73, 37.97, 1.73, 0.5)
+lstat = st.slider("LSTAT (% Lower Status Population)", 1.73, 37.97,19.85 , 0.5)
 
 # Prediction
 input_df = pd.DataFrame([[rm, ptratio, lstat]], columns=["RM", "PTRATIO", "LSTAT"])
