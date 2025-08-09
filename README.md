@@ -2,44 +2,34 @@
 
 This project focuses on predicting the median value of owner-occupied homes in Boston using various housing and demographic features such as number of rooms, crime rate, and distance to employment centers.
 
-https://bostonhousing-price-prediction.streamlit.app/
-## Dataset
 
-The dataset used is the classic Boston Housing Dataset, commonly used in regression problems.
-
-- Target Variable: `MEDV` – Median value of owner-occupied homes in $1000's.
+🔗 *Live App:* [Boston Housing Price Prediction](https://bostonhousing-price-prediction.streamlit.app/)
 
 ---
 
-## Models Applied
-
-### 1. Simple Linear Regression  
-- Features used: `RM` (Average number of rooms per dwelling)  
-- Reason: `RM` had the strongest correlation with the target variable.  
-- MSE: 28.92
-
-### 2. Multiple Linear Regression  
-- Features used: Top 3 features most correlated with `MEDV`:  
-  - `RM`, `PTRATIO`, `LSTAT`  
-- Reason: These features showed the strongest linear relationships with the target.  
-- MSE: 13.82
-
-### 3. Polynomial Regression  
-- Features used: Same as in multiple linear regression (`RM`, `PTRATIO`, `LSTAT`)  
-- Reason: Applied polynomial transformation to capture non-linear relationships between features and the target.  
-- MSE: 9.29 (Best performance)
-
-**Evaluation Metric:** Mean Squared Error (MSE)  
-Lower MSE = better performance
+## Dataset
+- *Source:* [Boston Housing Dataset on Kaggle](https://www.kaggle.com/datasets/vikrishnan/boston-house-prices) — a classic dataset widely used in regression problems.
+- *Target Variable:* MEDV – Median value of owner-occupied homes in $1000's.
 
 ---
 
 ## Data Preprocessing
+- Dropped weakly correlated features (CHAS, B).
+- Verified no missing values or duplicate rows.
+- Detected and removed outliers using the IQR method.
+- Applied Min-Max scaling to numerical features for normalization.
 
-- Dropped weakly correlated features  
-- Handled missing values and duplicate rows  
-- Treated outliers using the IQR method  
-- Scaled numerical features using MinMaxScaler
+---
+
+## Models Applied & Performance
+
+| Model                     | Features Used                  | Reason for Selection                          | MSE   |
+|---------------------------|--------------------------------|-----------------------------------------------|-------|
+| Simple Linear Regression  | RM                             | Strongest positive correlation with MEDV      | 28.92 |
+| Multiple Linear Regression| RM, PTRATIO, LSTAT             | Top 3 most correlated features                | 13.82 |
+| Polynomial Regression     | RM, PTRATIO, LSTAT             | Capture non-linear relationships              | *9.29* |
+
+*Evaluation Metric:* Mean Squared Error (MSE) — Lower values indicate better performance.
 
 ---
 
@@ -62,7 +52,6 @@ Lower MSE = better performance
 | LSTAT    | % lower status of the population |
 | MEDV     | Median value of owner-occupied homes (Target) |
 
----
 
 ## Conclusion
 
@@ -70,6 +59,10 @@ Among the three applied models, Polynomial Regression achieved the lowest MSE an
 
 ---
 
-## Note
 
-The `MEDV` column represents the median (not mean) value of home prices, which is a more robust measure in the presence of outliers.
+💡 *Note:* MEDV represents the *median* (not mean) value of home prices, which is more robust in the presence of outliers.
+
+---
+
+## Project Report
+For a detailed explanation of the project steps, analysis, and results, see the [Full Report](docs/Boston_Housing_Report.pdf).
