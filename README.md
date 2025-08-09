@@ -65,4 +65,4 @@ Among the three applied models, Polynomial Regression achieved the lowest MSE an
 ---
 
 ## Project Report
-For a detailed explanation of the project steps, analysis, and results, see the [Full Report](docs/Boston_Housing_Report.pdf).
+For a detailed explanation of the project steps, analysis, and results, see the [Full Report](https://github.com/nadasalem155/Boston_Housing_Price_Prediction/blob/main/project-report.pdf).
