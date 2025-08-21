@@ -66,4 +66,4 @@ This project focuses on **predicting the median value of owner-occupied homes in
 ---
 
 ## Project Report 📄  
-For a detailed explanation of the project steps, analysis, and results, see the [Full Report](project-presentation.pdf).
+For a detailed explanation of the project steps, analysis, and results, see the [Full presentation](project-presentation.pdf).
