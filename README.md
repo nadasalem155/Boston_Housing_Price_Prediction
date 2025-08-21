@@ -1,18 +1,18 @@
-# Boston Housing Price Prediction
+# Boston Housing Price Prediction 🏠
 
-This project focuses on predicting the median value of owner-occupied homes in Boston using various housing and demographic features such as number of rooms, crime rate, and distance to employment centers.
+This project focuses on **predicting the median value of owner-occupied homes in Boston** using various housing and demographic features such as number of rooms, crime rate, and distance to employment centers.  
 
+🔗 **Live App:** [Boston Housing Price Prediction](https://bostonhousing-price-prediction.streamlit.app/)
 
-🔗 *Live App:* [Boston Housing Price Prediction](https://bostonhousing-price-prediction.streamlit.app/)
+---
+
+## Dataset 📊  
+- **Source:** [Boston Housing Dataset on Kaggle](https://www.kaggle.com/datasets/vikrishnan/boston-house-prices) — a classic dataset widely used in regression problems.  
+- **Target Variable:** `MEDV` – Median value of owner-occupied homes in $1000's.  
 
 ---
 
-## Dataset
-- *Source:* [Boston Housing Dataset on Kaggle](https://www.kaggle.com/datasets/vikrishnan/boston-house-prices) — a classic dataset widely used in regression problems.
-- *Target Variable:* MEDV – Median value of owner-occupied homes in $1000's.
-
----
-## Dataset Features
+## Dataset Features 📝
 
 | Column   | Description |
 |----------|-------------|
@@ -32,37 +32,38 @@ This project focuses on predicting the median value of owner-occupied homes in B
 | MEDV     | Median value of owner-occupied homes (Target) |
 
 ---
-## Data Preprocessing
-- Dropped weakly correlated features (CHAS, B).
-- Verified no missing values or duplicate rows.
-- Detected and removed outliers using the IQR method.
-- Applied Min-Max scaling to numerical features for normalization.
+
+## Data Preprocessing 🧹  
+- Dropped weakly correlated features (**CHAS**, **B**).  
+- Verified no missing values or duplicate rows.  
+- Detected and removed outliers using the **IQR method**.  
+- Applied **Min-Max scaling** to numerical features for normalization.  
 
 ---
 
-## Models Applied & Performance
+## Models Applied & Performance 🤖
 
-| Model                     | Features Used                  | Reason for Selection                          | MSE   |
-|---------------------------|--------------------------------|-----------------------------------------------|-------|
-| Simple Linear Regression  | RM                             | Strongest positive correlation with MEDV      | 28.92 |
-| Multiple Linear Regression| RM, PTRATIO, LSTAT             | Top 3 most correlated features                | 13.82 |
-| Polynomial Regression     | RM, PTRATIO, LSTAT             | Capture non-linear relationships              | *9.29* |
+| Model                      | Features Used                | Reason for Selection                     | MSE   |
+|----------------------------|------------------------------|------------------------------------------|-------|
+| Simple Linear Regression   | RM                           | Strongest positive correlation with MEDV | 28.92 |
+| Multiple Linear Regression | RM, PTRATIO, LSTAT           | Top 3 most correlated features           | 13.82 |
+| Polynomial Regression      | RM, PTRATIO, LSTAT           | Capture non-linear relationships         | **9.29** |
 
-*Evaluation Metric:* Mean Squared Error (MSE) — Lower values indicate better performance.
-
----
-
-
-## Conclusion
-
-Among the three applied models, Polynomial Regression achieved the lowest MSE and provided the most accurate predictions. This suggests that the relationship between housing features and prices is not strictly linear and benefits from more complex, non-linear modeling.
+**Evaluation Metric:** Mean Squared Error (MSE) — *Lower values indicate better performance.*  
 
 ---
 
+## Conclusion 🏁  
 
-💡 *Note:* MEDV represents the *median* (not mean) value of home prices, which is more robust in the presence of outliers.
+- **Polynomial Regression achieved the lowest MSE (9.29)** and provided the most accurate predictions.  
+- The relationship between housing features and prices is **not strictly linear** and benefits from **non-linear modeling**.  
 
 ---
 
-## Project Report
+💡 **Note:**  
+`MEDV` represents the **median** (not mean) value of home prices, which is more robust in the presence of outliers.  
+
+---
+
+## Project Report 📄  
 For a detailed explanation of the project steps, analysis, and results, see the [Full Report](https://github.com/nadasalem155/Boston_Housing_Price_Prediction/blob/main/project-report.pdf).
